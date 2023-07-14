@@ -7,6 +7,7 @@
 # useful for handling different item types with a single interface
 from itemadapter import ItemAdapter
 import json
+import os
 
 class JogosdbPipeline:
     def process_item(self, item, spider):
@@ -26,4 +27,7 @@ class JsonWriterPipeline:
     
 class SteamWriterPipeline(JsonWriterPipeline):
     def open_spider(self, spider):
-        self.file = open("dados/steam.jsonl", "w")
+        if os.path.exists("dados"):
+            self.file = open("dados/steam.jsonl", "w")
+        else:
+            os.makedirs('dados')
