@@ -12,6 +12,6 @@ st.title("Promoções da Steam")
 
 # Executar a raspagem ao clicar no botão
 cmdline.execute("scrapy crawl steam_especiais".split())
-run('scrapy crawl steam_especiais')
+# run('scrapy crawl steam_especiais')
 steam = pd.read_json("dados/steam.jsonl", lines=True)
 st.dataframe(steam)
