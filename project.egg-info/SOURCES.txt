@@ -1,0 +1,15 @@
+pyproject.toml
+setup.py
+jogosDB/__init__.py
+jogosDB/items.py
+jogosDB/middlewares.py
+jogosDB/pipelines.py
+jogosDB/settings.py
+jogosDB/spiders/__init__.py
+jogosDB/spiders/nuuvem_especiais.py
+jogosDB/spiders/steam_especiais.py
+project.egg-info/PKG-INFO
+project.egg-info/SOURCES.txt
+project.egg-info/dependency_links.txt
+project.egg-info/entry_points.txt
+project.egg-info/top_level.txt
