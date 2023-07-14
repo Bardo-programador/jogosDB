@@ -31,3 +31,4 @@ class SteamWriterPipeline(JsonWriterPipeline):
             self.file = open("dados/steam.jsonl", "w")
         else:
             os.makedirs('dados')
+            self.file = open("dados/steam.jsonl", "w")
