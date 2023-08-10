@@ -1,0 +1,17 @@
+## Igonorar o __pycache__
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+jogosDB/__pycache__
+jogosDB/spiders/__pycache__
+
+
+##Logs de erros
+*.log
+*.swp
+*.tmp
+
+##Ignorar pastas
+dados/
+
