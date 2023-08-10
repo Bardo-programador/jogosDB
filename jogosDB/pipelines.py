@@ -32,3 +32,11 @@ class SteamWriterPipeline(JsonWriterPipeline):
         else:
             os.makedirs('dados')
             self.file = open("dados/steam.jsonl", "w")
+
+class NuuvemWriterPipeline(JsonWriterPipeline):
+    def open_spider(self, spider):
+        if os.path.exists("dados"):
+            self.file = open("dados/nuuvem.jsonl", "w")
+        else:
+            os.makedirs('dados')
+            self.file = open("dados/nuuvem.jsonl", "w")

@@ -13,10 +13,9 @@ class SteamEspeciaisSpider(scrapy.Spider):
     #     url = 'https://store.steampowered.com/search/?specials=1&ndl=1'
     #     yield SplashRequest(url, self.parse, args={'wait': 5})
     custom_settings = {
-        # 'FEED_URI' : 'dados/steam_especiais.jsonl',
-        # 'FEED_FORMAT' : 'jsonlines',
         'ITEM_PIPELINES' : {
-            'jogosDB.pipelines.SteamWriterPipeline': 300,
+            'jogosDB.pipelines.SteamWriterPipeline': 400
+             ,
        }
     }
     def parse(self, response):
@@ -28,6 +27,3 @@ class SteamEspeciaisSpider(scrapy.Spider):
                     #'Indice' : indice,
             }
             indice += 1
-# process = CrawlerProcess()          
-# process.crawl(SteamEspeciaisSpider)
-# process.start() # the script will block here until the crawling is finished
