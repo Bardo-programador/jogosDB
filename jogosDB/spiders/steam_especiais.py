@@ -1,7 +1,6 @@
 import scrapy
 from scrapy_splash import SplashRequest
-from scrapy.crawler import CrawlerProcess
-
+from jogosDB.items import JogosdbItem
 
 class SteamEspeciaisSpider(scrapy.Spider):
     name = "steam_especiais"
@@ -19,11 +18,13 @@ class SteamEspeciaisSpider(scrapy.Spider):
        }
     }
     def parse(self, response):
-        tabela_jogos = response.css("#search_resultsRows a") ## Pegando a lista de jogos da página
+        tabela_jogos = response.css("#search_resultsRows a") ## Pegando a tag que contem a lista de jogos da página
         indice = 0
         for jogos in tabela_jogos: ## Iterando sobre a lista de jogos através dos links
-            yield {'Nome' : jogos.css(f"a > div.responsive_search_name_combined > div.col.search_name.ellipsis > span.title::text").get(),
-                    'Preco' : (int(jogos.css(f"a > div.responsive_search_name_combined > div.col.search_price_discount_combined::attr(data-price-final)").get())/100),
-                    #'Indice' : indice,
-            }
-            indice += 1
+            # Instancia o item jogo
+            jogo = JogosdbItem()
+            # Coleta o nome, preco e link nos nas tags
+            jogo['name'] = jogos.css(f"a > div.responsive_search_name_combined > div.col.search_name.ellipsis > span.title::text").get(),
+            jogo['price'] = (int(jogos.css(f"a > div.responsive_search_name_combined > div.col.search_price_discount_combined::attr(data-price-final)").get())/100),            
+            jogo['link'] = jogos.css("a::attr(href)").get()
+            yield jogo

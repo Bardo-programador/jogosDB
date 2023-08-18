@@ -18,16 +18,17 @@ class NuuvemEspeciaisSpider(scrapy.Spider):
                                             'jogosDB.pipelines.NuuvemWriterPipeline': 400} }
     
     def parse(self, response):
-        tabela = response.css("#catalog > div:nth-child(3) > div.products-items > div > div div")
+        tabela = response.css("#catalog > div:nth-child(3) > div.products-items > div > div div") ##Pega uma lista de divs 
         for jogos in tabela:
             jogo = JogosdbItem()            
-            nome = jogos.css("div.product-card--grid > div > a> div.product-card--content > div > h3::text").get()
+            nome = jogos.css("div.product-card--grid > div > a > div.product-card--content > div > h3::text").get()
             if nome is None:
                 continue
-            preco = jogos.css("div.product-card--grid > div > a> div.product-card--footer > div::attr(data-price)").get()
-            preco = json.loads(preco)
-            jogo['name'] = nome
-            jogo['price'] = preco['v']/100
+            preco_inteiro = jogos.css("div.product-card--grid > div > a > div.product-card--footer > add-to-cart > slot > template#default > button > span > span.integer::text").get()
+            preco_decimal = jogos.css("div.product-card--grid > div > a > div.product-card--footer > add-to-cart > slot > template#default > button > span > span.decimal::text").get().replace(',','.')
+            jogo['name'] = nome ## Pegando o nome do jogo
+            jogo['price'] = float(preco_inteiro+preco_decimal)
+            jogo['link'] = jogos.css("div.product-card--grid > div > a::attr(href)").get() ## Pegando o link do jogo
             yield jogo
         next_page_url = response.css('#catalog > div:nth-child(3) > div.products-items > footer > nav > a.pagination--action.pagination--action-right::attr(href)').get()
         if next_page_url:
