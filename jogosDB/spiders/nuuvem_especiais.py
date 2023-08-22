@@ -2,8 +2,7 @@ import scrapy
 from scrapy_splash import SplashRequest
 import json
 from jogosDB.items import JogosdbItem
-def geraJson(string):
-    return json.loads(string)
+geraJson = lambda x: json.loads(x)
 
 class NuuvemEspeciaisSpider(scrapy.Spider):
     name = "nuuvem_especiais"
@@ -24,11 +23,12 @@ class NuuvemEspeciaisSpider(scrapy.Spider):
             nome = jogos.css("div.product-card--grid > div > a > div.product-card--content > div > h3::text").get()
             if nome is None:
                 continue
-            preco_inteiro = jogos.css("div.product-card--grid > div > a > div.product-card--footer > add-to-cart > slot > template#default > button > span > span.integer::text").get()
-            preco_decimal = jogos.css("div.product-card--grid > div > a > div.product-card--footer > add-to-cart > slot > template#default > button > span > span.decimal::text").get().replace(',','.')
+            preco = jogos.css("div.product-card--grid > div > a > div.product-card--footer > div::attr(data-price)").get()
+            preco = geraJson(preco)
+            link = jogos.css("div.product-card--grid > div > a::attr(href)").get() ## Pegando o link do jogo
             jogo['name'] = nome ## Pegando o nome do jogo
-            jogo['price'] = float(preco_inteiro+preco_decimal)
-            jogo['link'] = jogos.css("div.product-card--grid > div > a::attr(href)").get() ## Pegando o link do jogo
+            jogo['price'] = preco['v']/100 ## Pegando o preço do jogo e dividindo por 100 para ficar
+            jogo['link'] = link
             yield jogo
         next_page_url = response.css('#catalog > div:nth-child(3) > div.products-items > footer > nav > a.pagination--action.pagination--action-right::attr(href)').get()
         if next_page_url:
