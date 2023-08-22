@@ -13,19 +13,19 @@ st.title("Promoções da Nuuvem")
 
 with open("dados/agenda.txt", 'r') as agenda:
     hora_agendada = agenda.read() ##Lê a hora agendada
-    if hora_agendada == "": ##Se estiver vazio, agenda para o dia seguinte
+if hora_agendada == "": ##Se estiver vazio, agenda para o dia seguinte
         nova_agenda = datetime.datetime.now().replace(hour=0, minute=0, second=0, microsecond=0) + datetime.timedelta(days=1) ## Formata a nova agenda para o dia seguinte as 00:00
         hora_agendada = str(nova_agenda) ##Variavel da agenda é atualizada
+        run("scrapy crawl nuuvem_especiais") ##Faz o web scraping na nuuvem
         with open("dados/agenda.txt", 'w') as agenda:
             agenda.write(str(nova_agenda)) ##Salva a nova agenda para o dia seguinte as 00:00
-        run("scrapy crawl nuuvem_especiais") ##Faz o web scraping na nuuvem
-    hora_agendada = datetime.datetime.strptime(hora_agendada, "%Y-%m-%d %H:%M:%S") ##Transforma a string em datetime
-    if hora_agendada <= datetime.datetime.now(): ##Se a hora agendada for menor que a hora atual, atualiza
-        st.write("Atualizando...")
-        run("scrapy crawl nuuvem_especiais") 
-        with open('dados/agenda.txt', 'w') as agenda: ##Salva a nova agenda para o dia seguinte as 00:00
-            nova_agenda = datetime.datetime.now().replace(hour=0, minute=0, second=0, microsecond=0)
-            agenda.write(str(nova_agenda + datetime.timedelta(days=1)))
+hora_agendada = datetime.datetime.strptime(hora_agendada, "%Y-%m-%d %H:%M:%S") ##Transforma a string em datetime
+if hora_agendada <= datetime.datetime.now(): ##Se a hora agendada for menor que a hora atual, atualiza
+        with st.spinner("Atualizando..."):
+            run("scrapy crawl nuuvem_especiais") 
+            with open('dados/agenda.txt', 'w') as agenda: ##Salva a nova agenda para o dia seguinte as 00:00
+                nova_agenda = datetime.datetime.now().replace(hour=0, minute=0, second=0, microsecond=0)
+                agenda.write(str(nova_agenda + datetime.timedelta(days=1)))
     
 nuuvem = pd.read_json("dados/nuuvem.jsonl", lines=True) ##Lê o arquivo jsonl
 for index, row in nuuvem.iterrows():

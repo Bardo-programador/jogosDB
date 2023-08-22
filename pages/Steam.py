@@ -6,8 +6,9 @@ from scripts import run
 
 st.title("Promoções da Steam")
 
-# Executar a raspagem ao clicar no botão
-run('scrapy crawl steam_especiais')
+# Executar a raspagem 
+with st.spinner("Atualizando"):
+    run('scrapy crawl steam_especiais')
 steam = pd.read_json("dados/steam.jsonl", lines=True)
 
 ##Exibir os dados
