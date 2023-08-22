@@ -7,7 +7,7 @@ import scrapy
 
 
 class JogosdbItem(scrapy.Item):
-    # define the fields for your item here like:
+    ## define the fields for your item here like:
     name = scrapy.Field()
     price = scrapy.Field()
     link = scrapy.Field()
