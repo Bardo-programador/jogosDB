@@ -13,8 +13,9 @@ class NuuvemEspeciaisSpider(scrapy.Spider):
     # def start_requests(self):
     #     url = 'https://www.nuuvem.com/br-pt/catalog/price/promo/sort/bestselling/sort-mode/desc'
     #     yield SplashRequest(url, self.parse, args={'wait': 5})
-    custom_settings = { "ITEM_PIPELINES" : {'jogosDB.pipelines.JogosdbPipeline': 300,
-                                            'jogosDB.pipelines.NuuvemWriterPipeline': 400} }
+    custom_settings = { 
+        'FEEDS' : {'dados/nuuvem.jsonl': {'format' : 'jsonlines' }},
+     }
     
     def parse(self, response):
         tabela = response.css("#catalog > div:nth-child(3) > div.products-items > div > div div") ##Pega uma lista de divs 
