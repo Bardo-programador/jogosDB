@@ -1,10 +1,13 @@
-## Igonorar o __pycache__
-__pycache__/
+## Igonorar arquivos
+
 *.pyc
 *.pyo
 *.pyd
-jogosDB/__pycache__
-jogosDB/spiders/__pycache__
+*.csv
+*.json
+*.jsonl
+*.xml
+*.xlsx
 
 
 ##Logs de erros
@@ -13,5 +16,7 @@ jogosDB/spiders/__pycache__
 *.tmp
 
 ##Ignorar pastas
-dados/
-
+dados
+jogosDB/__pycache__
+jogosDB/spiders/__pycache__
+__pycache__
