@@ -17,12 +17,15 @@ class SteamEspeciaisSpider(scrapy.Spider):
                                          "overwrite": True}},
        }
     
-    def parse(self, response, ):
-        ## -- Versão nova
+    def parse(self, response):
         # Pega os dados através de uma requisição json
         pagina = dict(response.json()) ## Pega o codigo json da pagina
         total_jogos = pagina['total_count'] #Pega o total de jogos
         start = pagina['start'] #Pega o valor de start
+        if int(start) == 0:
+            ## Aqui é feito o pre-processamento para pegar todos os links das páginas para otimizar a busca
+            for i in range(50, int(total_jogos), 50): 
+                yield response.follow(f"https://store.steampowered.com/search/results/?query&start={i}&count=50&dynamic_data=&sort_by=_ASC&ignore_preferences=1&supportedlang=brazilian&snr=1_7_7_2300_7&specials=1&infinite=1")
         seletor = Selector(text = pagina['results_html']) ## Transforma o codigo html em um objeto do scrapy
         nomes = seletor.css(".title::text").getall() ##Pega os nomes de todos osjogos
         precos = seletor.css(".discount_final_price::text").getall() ##Pega o preço de todos os jogos
@@ -34,23 +37,3 @@ class SteamEspeciaisSpider(scrapy.Spider):
             jogo['price'] = preco
             jogo['link'] = link
             yield jogo ## Retorna o item
-
-        # Verifica se ainda há jogos para serem raspados
-        if start <= total_jogos:
-            next_page_url = f"https://store.steampowered.com/search/results/?query&start={start+50}&count=50&dynamic_data=&sort_by=_ASC&ignore_preferences=1&supportedlang=brazilian&snr=1_7_7_2300_7&specials=1&infinite=1"
-            next_page_url = response.urljoin(next_page_url)
-            # Faz uma nova requisição para a próxima página
-            yield scrapy.Request(url=next_page_url, callback=self.parse)
-        
-        #Versão antiga
-        # proximo_link = f"https://store.steampowered.com/search/results/?query&start={x+50}&count=50&dynamic_data=&sort_by=_ASC&ignore_preferences=1&supportedlang=brazilian&snr=1_7_7_2300_7&specials=1&infinite=1"
-        # tabela_jogos = response.css("#search_resultsRows a") ## Pegando a tag que contem a lista de jogos da página
-        # indice = 0
-        # for jogos in tabela_jogos: ## Iterando sobre a lista de jogos através dos links
-        #     # Instancia o item jogo
-        #     jogo = JogosdbItem()
-        #     # Coleta o nome, preco e link nos nas tags
-        #     jogo['name'] = jogos.css(f"a > div.responsive_search_name_combined > div.col.search_name.ellipsis > span.title::text").get(),
-        #     jogo['price'] = (int(jogos.css(f"a > div.responsive_search_name_combined > div.col.search_price_discount_combined::attr(data-price-final)").get())/100),            
-        #     jogo['link'] = jogos.css("a::attr(href)").get()
-            # yield jogo
