@@ -1,21 +1,17 @@
 import streamlit as st
 import pandas as pd
 from scrapy import cmdline
-from scripts import verificarAgenda, run
+from scripts import verificarAgenda, exibirJogos
 # Configurar o Streamlit
 
 st.title("Promoções da Steam")
 
 # Executar a raspagem 
 verificarAgenda("dados/steam_agenda.txt", "scrapy crawl steam_especiais")
+with st.sidebar:
+    preco_limite = st.slider(min_value=0, max_value=250, value=20, step=10, label="Preço máximo") ##Cria um filtro para o preço máximo
+
 steam = pd.read_json("dados/steam.jsonl", lines=True)
 ##Exibir os dados
 filtro = st.text_input("Procure por um jogo") ##Cria um filtro para o nome do jogo
-st.markdown("## Lista de jogos em promoção da Steam")
-for index, row in steam.iterrows():
-    nome_minusculo = row['name'].lower() ##Transforma o nome do jogo em minusculo
-    if nome_minusculo.find(filtro.lower()) != -1:
-        nome = row['name'] # Como o nome é uma lista, pegamos o primeiro elemento
-        preco = row['price'] # Como o preço é uma lista, pegamos o primeiro elemento
-        link = row['link'] # O link não é uma lista, então não precisamos pegar o primeiro elemento
-        st.markdown(f"- [{nome}]({link}) - {preco}") # Exibimos o nome, o link e o preço formatado em MarkDown
+exibirJogos(steam, preco_limite, filtro) ##Exibe os jogos de acordo com o filtro e o preço limite
