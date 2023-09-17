@@ -12,9 +12,9 @@ BOT_NAME = "jogosDB"
 SPIDER_MODULES = ["jogosDB.spiders"]
 NEWSPIDER_MODULE = "jogosDB.spiders"
 
-FEEDS = {
-    '%(name)s/%(name)s_%(time)s.jsonlines' : { 'format' : 'jsonlines' },
-}
+# FEEDS = {
+#     '%(name)s/%(name)s_%(time)s.jsonlines' : { 'format' : 'jsonlines' },
+# }
 
 # Crawl responsibly by identifying yourself (and your website) on the user-agent
 #USER_AGENT = "jogosDB (+http://www.yourdomain.com)"
