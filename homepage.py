@@ -9,4 +9,5 @@ st.markdown("""
 Atualmente as lojas suportadas são:
 - [Nuuvem](https://www.nuuvem.com/)
 - [Steam](https://store.steampowered.com/)
+- [GOG](https://www.gog.com/)
 """)
