@@ -27,18 +27,17 @@ class NuuvemEspeciaisSpider(scrapy.Spider):
         tabela = response.css("#catalog > div:nth-child(3) > div.products-items > div > div div") ##Pega uma lista de divs 
         for jogos in tabela:
             jogo = JogosdbItem()            
-            nome = jogos.css("div.product-card--grid > div > a > div.product-card--content > div > h3::text").get()
+            nome = jogos.css("div.product-card--grid > div > a::attr(title)").get()
             if nome is None:
                 continue
-            preco = jogos.css("div.product-card--grid > div > a > div.product-card--footer > div::attr(data-price)").get()
-            preco = geraJson(preco)
+            preco_integer = jogos.css("div.product-card--grid > div > a > div.product-card--footer > add-to-cart > slot > template > button > span > span.integer::text").get()
+            preco_decimal = jogos.css("div.product-card--grid > div > a > div.product-card--footer > add-to-cart > slot > template > button > span > span.decimal::text").get()
             link = jogos.css("div.product-card--grid > div > a::attr(href)").get() ## Pegando o link do jogo
             jogo['name'] = nome ## Pegando o nome do jogo
-            jogo['price'] = preco['v']/100 ## Pegando o preço do jogo e dividindo por 100 para ficar
+            jogo['price'] = (preco_integer + preco_decimal).replace(",",".") ## Pegando o preço do jogo e dividindo por 100 para ficar
             jogo['link'] = link
             yield jogo
         # next_page_url = response.css('#catalog > div:nth-child(3) > div.products-items > footer > nav > a.pagination--action.pagination--action-right::attr(href)').get()
         # if next_page_url:
         #     next_page_url = response.urljoin(next_page_url)
         #     yield scrapy.Request(url=next_page_url, callback=self.parse)
-#catalog > div:nth-child(3) > div.products-items > div > div > div:nth-child(2) > div > a > div.product-card--content > div > h3
