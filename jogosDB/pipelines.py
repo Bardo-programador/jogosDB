@@ -15,6 +15,7 @@ class JogosdbPipeline:
     def process_item(self, item, spider):
         return item
 
+    
    
 class SteamWriterPipeline(JogosdbPipeline):
     def open_spider(self, spider):
@@ -25,10 +26,13 @@ class SteamWriterPipeline(JogosdbPipeline):
             self.file = open("dados/steam.jsonl", "w")
 
     def process_item(self, item, spider)->scrapy.Item:
+        self.precoFormatado(item)
+        return item
+
+def precoFormatado(self, item):
         price_pattern = r'(\d+,\d+)'
         item['price'] = (re.search(price_pattern, item['price'])).group(1)
         item['price'] = float(item['price'].replace(",","."))
-        return item
 
 class NuuvemWriterPipeline(JogosdbPipeline):
     def open_spider(self, spider):
@@ -37,3 +41,7 @@ class NuuvemWriterPipeline(JogosdbPipeline):
         else:
             os.makedirs('dados')
             self.file = open("dados/nuuvem.jsonl", "w")
+
+    def process_item(self, item, spider):
+        item['price'] = float(item['price'])
+        return itemi
