@@ -16,7 +16,7 @@
 *.tmp
 
 ##Ignorar pastas
-dados
+dados/
 jogosDB/__pycache__
 jogosDB/spiders/__pycache__
 __pycache__
