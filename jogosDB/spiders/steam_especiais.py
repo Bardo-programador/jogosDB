@@ -1,6 +1,7 @@
 import scrapy
 from scrapy_splash import SplashRequest
 from jogosDB.items import JogosdbItem
+from jogosDB.pipelines import SteamWriterPipeline
 import json
 from scrapy.selector import Selector
 class SteamEspeciaisSpider(scrapy.Spider):
@@ -15,6 +16,9 @@ class SteamEspeciaisSpider(scrapy.Spider):
     custom_settings = {
         'FEEDS' : {'dados/steam.jsonl': {'format' : 'jsonlines',
                                          "overwrite": True}},
+        "ITEM_PIPELINES" : {
+            'jogosDB.pipelines.SteamWriterPipeline' : 300
+        }
        }
     
     def parse(self, response):
