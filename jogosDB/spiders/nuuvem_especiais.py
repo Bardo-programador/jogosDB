@@ -2,6 +2,7 @@ import scrapy
 from scrapy_splash import SplashRequest
 import json
 from jogosDB.items import JogosdbItem
+from jogosDB.pipelines import NuuvemWriterPipeline
 geraJson = lambda x: json.loads(x)
 
 class NuuvemEspeciaisSpider(scrapy.Spider):
@@ -15,8 +16,12 @@ class NuuvemEspeciaisSpider(scrapy.Spider):
     #     yield SplashRequest(url, self.parse, args={'wait': 5})
     custom_settings = { 
         'FEEDS' : {'dados/nuuvem.jsonl': {'format' : 'jsonlines', 'overwrite' : True }},
-     }
-    
+     
+
+    "ITEM_PIPELINES" : {
+            'jogosDB.pipelines.NuuvemWriterPipeline' : 300
+        }
+    }
     def parse(self, response):
         
         pagina_atual = response.css("#catalog > div:nth-child(3) > div.products-items > footer > nav > a.pagination--item.pagination--item-active::text").get()
